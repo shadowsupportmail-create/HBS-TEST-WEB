@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HBS Services | VIP Enterprise Portal</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #007AFF; /* iOS Blue */
+      --glass-bg: rgba(255, 255, 255, 0.4);
+      --glass-border: rgba(255, 255, 255, 0.5);
+      --text: #1d1d1f;
+      --subtext: #424245;
+      --bg: #f5f5f7;
+      --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    }
+
+    body.dark {
+      --glass-bg: rgba(20, 20, 20, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text: #f5f5f7;
+      --subtext: #a1a1a6;
+      --bg: #000000;
+      --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.5s ease;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Aurora Background */
+    .aurora {
+      position: fixed; width: 100vw; height: 100vh; z-index: -1;
+      filter: blur(100px); opacity: 0.4;
+    }
+    .blob {
+      position: absolute; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #5856D6);
+    }
+
+    /* Glass Navigation */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: var(--glass-bg);
+      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+    .logo span { background: linear-gradient(to right, var(--primary), #5856D6); -webkit-background-clip: text; color: transparent; }
+
+    .nav-links { display: flex; gap: 25px; align-items: center; }
+    .nav-links a { 
+      text-decoration: none; color: var(--text); font-size: 0.9rem; font-weight: 500; 
+      opacity: 0.7; transition: 0.3s; 
+    }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--primary); }
+
+    .theme-btn {
+      background: var(--primary); color: white; border: none;
+      width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
+    }
+
+    /* Container & SPA Sections */
+    .container { max-width: 1200px; margin: 120px auto 60px; padding: 0 20px; }
+    .view { display: none; animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+    .view.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px; padding: 40px;
+      box-shadow: var(--card-shadow); margin-bottom: 30px;
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+    .tile {
+      padding: 30px; cursor: pointer; transition: 0.4s; text-align: left;
+      border-radius: 24px; display: flex; flex-direction: column; gap: 15px;
+    }
+    .tile:hover { transform: scale(1.02); background: rgba(var(--primary), 0.1); border-color: var(--primary); }
+    .tile i { font-size: 2rem; color: var(--primary); }
+
+    h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2.5px; margin-bottom: 20px; line-height: 1; }
+    p { color: var(--subtext); line-height: 1.6; font-size: 1.1rem; }
+
+    /* Buttons */
+    .btn {
+      padding: 14px 28px; border-radius: 50px; border: none; font-weight: 600;
+      cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px;
+      background: var(--primary); color: white; text-decoration: none;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* Mobile Footer Nav */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      h1 { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="aurora">
+    <div class="blob" style="width:600px; height:600px; top:-200px; left:-200px;"></div>
+    <div class="blob" style="width:500px; height:500px; bottom:-100px; right:-100px; background:#5856D6;"></div>
+  </div>
+
+  <nav>
+    <div class="logo" onclick="route('home')">HBS <span>VIP</span></div>
+    <div class="nav-links">
+      <a href="#" onclick="route('home')" id="link-home">Home</a>
+      <a href="#" onclick="route('services')" id="link-services">Services</a>
+      <a href="#" onclick="route('corporate')" id="link-corporate">Corporate</a>
+      <a href="#" onclick="route('legal')" id="link-legal">Legal</a>
+      <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    </div>
+  </nav>
+
+  <div class="container">
+    
+    <section id="home" class="view active">
+      <h1>Infinite Precision.<br>Dedicated Support.</h1>
+      <p style="max-width: 600px; margin-bottom: 40px;">The HBS VIP Portal provides world-class engineering solutions for medical labs and corporate offices with iPhone-grade simplicity.</p>
+      
+      <div class="grid">
+        <div class="glass-card tile" onclick="route('medical')">
+          <i class="fas fa-microscope"></i>
+          <h3>Medical Calibrations</h3>
+          <p>ISO-certified precision for lab instruments and diagnostic tools.</p>
+        </div>
+        <div class="glass-card tile" onclick="route('printers')">
+          <i class="fas fa-print"></i>
+          <h3>Enterprise Printers</h3>
+          <p>Full fleet management and smart consumable replenishment.</p>
+        </div>
+        <div class="glass-card tile" onclick="route('procurement')">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>VIP Procurement</h3>
+          <p>Priority access to global hardware supply chains.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="view">
+      <h1>Solutions Suite</h1>
+      <div class="grid">
+        <div class="glass-card tile" onclick="route('medical')"><h3>Medical Calibrations</h3></div>
+        <div class="glass-card tile" onclick="route('printers')"><h3>Enterprise Printers</h3></div>
+        <div class="glass-card tile" onclick="route('lifecycle')"><h3>Lifecycle Management</h3></div>
+        <div class="glass-card tile" onclick="route('procurement')"><h3>VIP Procurement</h3></div>
+      </div>
+    </section>
+
+    <section id="corporate" class="view">
+      <h1>Corporate Legacy</h1>
+      <div class="grid">
+        <div class="glass-card tile" onclick="route('team')"><h3>Executive Team</h3></div>
+        <div class="glass-card tile" onclick="route('investors')"><h3>Investors</h3></div>
+        <div class="glass-card tile" onclick="route('careers')"><h3>Careers</h3></div>
+        <div class="glass-card tile" onclick="route('compliance')"><h3>Compliance</h3></div>
+      </div>
+    </section>
+
+    <section id="legal" class="view">
+      <h1>Global Standards</h1>
+      <div class="grid">
+        <div class="glass-card tile" onclick="route('privacy')"><h3>Privacy Architecture</h3></div>
+        <div class="glass-card tile" onclick="route('terms')"><h3>Terms of Service</h3></div>
+        <div class="glass-card tile" onclick="route('sla')"><h3>SLA Agreements</h3></div>
+      </div>
+    </section>
+
+    <section id="medical" class="view">
+      <a href="#" onclick="route('services')" class="btn" style="background:none; color:var(--primary); padding:0; margin-bottom:20px;"><i class="fas fa-chevron-left"></i> Back to Solutions</a>
+      <h1>Medical Calibrations</h1>
+      <div class="glass-card">
+        <p>Our engineering team specializes in the calibration of high-stakes diagnostic equipment including centrifuges, incubators, and lab-grade scales. We ensure 100% compliance with Health Canada and FDA standards.</p>
+        <br>
+        <a href="#" class="btn">Request On-Site Service</a>
+      </div>
+    </section>
+
+    <section id="privacy" class="view">
+      <h1>Privacy Architecture</h1>
+      <div class="glass-card">
+        <p>HBS utilizes military-grade AES-256 encryption for all partner data. Our infrastructure is built on zero-trust principles, ensuring that your corporate intelligence and medical records remain inaccessible to unauthorized parties.</p>
+      </div>
+    </section>
+
+    <section id="sla" class="view">
+      <h1>SLA Agreements</h1>
+      <div class="glass-card">
+        <p>VIP Tier provides a 4-hour guaranteed response time across North America. Our Service Level Agreements are legally backed to ensure your downtime is kept to absolute zero.</p>
+      </div>
+    </section>
+
+    <section id="lifecycle" class="view"><h1>Lifecycle Management</h1><div class="glass-card"><p>Asset tracking and automated hardware retirement programs.</p></div></section>
+    <section id="procurement" class="view"><h1>VIP Procurement</h1><div class="glass-card"><p>Exclusive hardware sourcing for elite partners.</p></div></section>
+    <section id="team" class="view"><h1>Executive Team</h1><div class="glass-card"><p>Our leadership has 20+ years in medical engineering.</p></div></section>
+    <section id="investors" class="view"><h1>Investor Relations</h1><div class="glass-card"><p>HBS quarterly reports and stakeholder transparency portals.</p></div></section>
+    <section id="careers" class="view"><h1>Careers</h1><div class="glass-card"><p>Join the future of engineered services. Open roles in Scarborough and NY.</p></div></section>
+    <section id="compliance" class="view"><h1>Compliance</h1><div class="glass-card"><p>Full ISO and regulatory documentation archive.</p></div></section>
+    <section id="terms" class="view"><h1>Terms of Service</h1><div class="glass-card"><p>The legal framework of our partnership.</p></div></section>
+    <section id="printers" class="view"><h1>Enterprise Printers</h1><div class="glass-card"><p>Fleet optimization and supply chain management for corporate offices.</p></div></section>
+
+  </div>
+
+  <script>
+    // THEME SYSTEM
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const icon = document.querySelector('.theme-btn i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    }
+
+    // SPA ROUTER
+    function route(pageId) {
+      // Hide all views
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      
+      // Show target
+      const target = document.getElementById(pageId);
+      if(target) target.classList.add('active');
+
+      // Update active nav link
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const activeLink = document.getElementById('link-' + pageId);
+      if(activeLink) activeLink.classList.add('active');
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // INITIALIZE
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for mobile preference or default to light
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // toggleTheme(); // Uncomment to follow system dark mode
+      }
+    });
+  </script>
+</body>
+</html>
