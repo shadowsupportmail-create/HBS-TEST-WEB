@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>HBS Services | Premium Solutions</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ========== BASE RESET ========== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    /* ========== MODERN THEME VARIABLES ========== */
+    :root {
+      /* Light Theme (Zinc/Slate base) */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f4f4f5;
+      --bg-card: #ffffff;
+      --text-primary: #09090b;
+      --text-secondary: #52525b;
+      --text-muted: #a1a1aa;
+      --border: #e4e4e7;
+      
+      /* Accents */
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --accent-light: #eff6ff;
+      --accent-glow: rgba(37, 99, 235, 0.15);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --shadow-hover: 0 20px 40px -10px rgba(37, 99, 235, 0.2);
+    }
+
+    body.dark {
+      /* Dark Theme (Deep Midnight Zinc) */
+      --bg-primary: #09090b;
+      --bg-secondary: #18181b;
+      --bg-card: #18181b;
+      --text-primary: #f4f4f5;
+      --text-secondary: #a1a1aa;
+      --text-muted: #52525b;
+      --border: #27272a;
+      
+      /* Accents */
+      --accent: #3b82f6;
+      --accent-dark: #60a5fa;
+      --accent-light: rgba(59, 130, 246, 0.1);
+      --accent-glow: rgba(59, 130, 246, 0.25);
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+      --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.5);
+      --shadow-hover: 0 20px 40px -10px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ========== GLOBAL STYLES ========== */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    h1, h2, h3, h4 { 
+      line-height: 1.2; 
+      letter-spacing: -0.03em; 
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ========== NAVIGATION (GLASSMORPHISM) ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.4s ease;
+    }
+    body.dark .navbar {
+      background: rgba(9, 9, 11, 0.75);
+    }
+    .navbar.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      -webkit-background-clip: text;
+      color: transparent;
+      cursor: pointer;
+    }
+    .logo img {
+      height: 40px;
+      width: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      position: relative;
+      font-size: 0.95rem;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text-primary);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after, .nav-links a.active::after {
+      width: 100%;
+    }
+
+    /* THEME TOGGLE ANIMATION */
+    .theme-toggle {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 0.5rem;
+      width: 64px;
+      height: 34px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+    .theme-toggle i {
+      position: absolute;
+      font-size: 0.9rem;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .theme-toggle .fa-sun {
+      color: #f59e0b;
+      left: 8px;
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+    .theme-toggle .fa-moon {
+      color: #a1a1aa;
+      right: 8px;
+      opacity: 0;
+      transform: scale(0.5) rotate(90deg);
+    }
+    body.dark .theme-toggle .fa-sun {
+      opacity: 0;
+      transform: scale(0.5) rotate(-90deg);
+    }
+    body.dark .theme-toggle .fa-moon {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+      color: #fbbf24;
+    }
+    .theme-toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 26px;
+      height: 26px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    body.dark .theme-toggle-thumb {
+      left: calc(100% - 29px);
+      background: var(--text-primary);
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2.2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: #fff;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px var(--accent-glow);
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-primary:hover::after { left: 100%; }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-primary);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* ========== HERO SECTION (MODERN GLOW) ========== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 80px; /* Offset for navbar */
+      overflow: hidden;
+    }
+    /* Animated Glowing Orbs */
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      animation: pulseGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+    }
+
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--text-primary) 30%, var(--text-muted) 100%);
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2.5rem auto;
+    }
+
+    /* ========== CARDS ========== */
+    .card-hover {
+      background: var(--bg-card);
+      border-radius: 1.5rem;
+      padding: 2.5rem 2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 1;
+    }
+    .card-hover::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 1.5rem;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      margin: -2px;
+    }
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hover);
+      border-color: transparent;
+    }
+    .card-hover:hover::before {
+      opacity: 1;
+    }
+    .card-hover i {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ========== PARTNER LOGOS ========== */
+    .partner-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+      margin: 4rem 0;
+      padding: 2rem;
+      background: var(--bg-secondary);
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+    }
+    .partner-grid img {
+      height: 40px;
+      transition: all 0.3s ease;
+      opacity: 0.5;
+      filter: grayscale(100%);
+    }
+    body.dark .partner-grid img {
+      filter: brightness(0) invert(1) grayscale(100%);
+      opacity: 0.4;
+    }
+    .partner-grid img:hover {
+      transform: scale(1.1);
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+    body.dark .partner-grid img:hover {
+      filter: brightness(0) invert(1);
+      opacity: 1;
+    }
+
+    /* ========== FORMS & INPUTS ========== */
+    input, textarea {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-light);
+      background: var(--bg-card);
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 5rem 1.5rem 3rem;
+      margin-top: 6rem;
+    }
+    .footer h4 {
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+    .footer p, .footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 0.8rem;
+      display: block;
+      transition: color 0.3s ease;
+    }
+    .footer a:hover {
+      color: var(--accent);
+    }
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .social-links i {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .social-links i:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* ========== PAGE TRANSITIONS & VISIBILITY ========== */
+    .page {
+      display: none;
+      opacity: 0;
+      padding-top: 100px;
+    }
+    .page.active-page {
+      display: block;
+      animation: fadeInPage 0.5s ease forwards;
+    }
+    @keyframes fadeInPage {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll Reveal Animation Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+
+    /* ========== MOBILE RESPONSIVENESS ========== */
+    @media (max-width: 900px) {
+      .nav-links { display: none; } /* Could add hamburger menu here for production */
+      .hero-content h1 { font-size: 2.8rem; }
+      .partner-grid { gap: 2rem; padding: 1.5rem; }
+      .grid-2 { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="logo" data-page="home">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABECAYAAAAvMQN7AAAACXBIWXMAAAsTAAALEwEAmpwYAAAE+GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDEgNzkuMTRlY2I0MiwgMjAyMi8xMi8wMi0xOToxMjo0NCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgRmlyZXdvcmtzIENTNiAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIzLTExLTI5VDE1OjUwOjA1WiIgeG1wOk1vZGlmeURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjg0ZDJiYWVkLThiN2EtZDY0MC1iNzk1LTFlNDA5ZThhOWRhOCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRp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" alt="HBS Logo">
+      <span>HBS Services</span>
+    </div>
+    <div class="nav-links">
+      <a href="#" data-page="home" class="nav-link active">Home</a>
+      <a href="#" data-page="services" class="nav-link">Services</a>
+      <a href="#" data-page="about" class="nav-link">About Us</a>
+      <a href="#" data-page="contact" class="nav-link">Contact</a>
+      <a href="#" data-page="portal" class="nav-link">Portal</a>
+      
+      <div class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+        <div class="theme-toggle-thumb"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="home-page" class="page active-page">
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container" style="text-align: center;">
+      <div class="hero-content reveal">
+        <h1>Next-Gen Medical &<br>Office Solutions</h1>
+        <p class="reveal delay-100">Revolutionize your workspace with top-tier equipment, seamless integration, and 24/7 dedicated support tailored to your enterprise.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;" class="reveal delay-200">
+          <a href="#" class="btn btn-primary" data-page="services">Explore Services <i class="fas fa-arrow-right"></i></a>
+          <a href="#" class="btn btn-outline" data-page="contact">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container" style="margin-top: -50px;">
+    <div class="partner-grid reveal">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" alt="HP">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Xerox_logo.svg/800px-Xerox_logo.svg.png" alt="Xerox">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Samsung_wordmark.svg/1920px-Samsung_wordmark.svg.png" alt="Samsung">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Lexmark-primary-logo.svg" alt="Lexmark">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Epson_logo.svg" alt="Epson">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Canon_wordmark.svg" alt="Canon">
+    </div>
+
+    <div class="grid-2 reveal" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin: 6rem 0; align-items: center;">
+      <div style="position: relative;">
+        <div style="position: absolute; top: -20px; left: -20px; width: 100px; height: 100px; background: var(--accent); border-radius: 50%; filter: blur(50px); opacity: 0.5;"></div>
+        <img src="https://images.unsplash.com/photo-1579389083078-4e7018379f7e?w=800&auto=format" style="border-radius: 2rem; width: 100%; box-shadow: var(--shadow-lg); position: relative; z-index: 1;" alt="collaboration">
+      </div>
+      <div>
+        <span style="color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">Global Network</span>
+        <h2 style="font-size: 2.5rem; margin: 1rem 0;">In collaboration with industry leaders</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">Locally owned, globally connected. We bridge the gap between cutting-edge manufacturers and your day-to-day operational needs.</p>
+        <a href="#" class="btn btn-outline" data-page="about">Discover Our Story</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="services-page" class="page">
+  <div class="container" style="padding-bottom: 4rem;">
+    <div style="text-align: center; margin-bottom: 4rem;" class="reveal">
+      <span style="background: var(--accent-light); padding: 0.4rem 1.2rem; border-radius: 50px; color: var(--accent); font-weight: 600; font-size: 0.9rem;">What We Offer</span>
+      <h1 style="font-size: 3.5rem; margin-top: 1.5rem;">Premium Services</h1>
+      <p style="color: var(--text-secondary); max-width: 600px; margin: 1rem auto; font-size: 1.1rem;">Comprehensive solutions tailored to keep your medical and office environments running at peak performance.</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem;">
+      <div class="card-hover reveal delay-100">
+        <i class="fas fa-microscope"></i>
+        <h3>Medical Equipment</h3>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">Expert repair & maintenance for Drucker, Thermo Fisher, Hamilton, Bell Thermo, Unico. Preventive care and 24/7 support.</p>
+      </div>
+      <div class="card-hover reveal delay-200">
+        <i class="fas fa-chart-line"></i>
+        <h3>Comprehensive Support</h3>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">Technical assistance, costing estimates, and supply chain optimization to maximize your uptime and overall efficiency.</p>
+      </div>
+      <div class="card-hover reveal delay-300">
+        <i class="fas fa-cubes"></i>
+        <h3>Lab Consumables</h3>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">High-quality supplies from HP, Lexmark, Epson, and Canon. Bulk pricing and rapid shipping across North America.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="about-page" class="page">
+  <div class="container" style="padding-bottom: 4rem;">
+    <div class="grid-2 reveal" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 5rem; align-items: center;">
+      <div>
+        <h1 style="font-size: 3.5rem;">Our Legacy</h1>
+        <p style="margin-top: 1.5rem; color: var(--text-secondary); font-size: 1.1rem;">Since 2003, H.B.S SERVICES INC has been a trusted supplier for medical lab devices and corporate office supplies. We deliver name-brand equivalent products backed by a 100% satisfaction guarantee.</p>
+        <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 1.1rem;">Easy to do business with, transparent on value, and fully committed to exceeding expectations.</p>
+      </div>
+      <div>
+        <img src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=800&auto=format" style="border-radius: 2rem; width: 100%; box-shadow: var(--shadow-lg);">
+      </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem;">
+      <div class="card-hover reveal delay-100">
+        <i class="fas fa-bullseye"></i>
+        <h3>Our Mission</h3>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">To create an awesome customer experience and deliver undeniable value. We're here before, during, and long after your purchase.</p>
+      </div>
+      <div class="card-hover reveal delay-200">
+        <i class="fas fa-handshake"></i>
+        <h3>Why Choose Us</h3>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">Over 20+ years of deep industry experience, premium quality brands, strict regulatory compliance, and exceptional service.</p>
+      </div>
+      <div class="card-hover reveal delay-300">
+        <i class="fas fa-globe-americas"></i>
+        <h3>Global Reach</h3>
+        <p style="color: var(--text-secondary); margin-top: 1rem;">Seamless shipping to Canada, the USA, and beyond. Competitive shipping rates and fast delivery for all critical supplies.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="contact-page" class="page">
+  <div class="container" style="padding-bottom: 4rem;">
+    <div style="text-align: center; margin-bottom: 4rem;" class="reveal">
+      <h1 style="font-size: 3.5rem;">Let's Connect</h1>
+      <p style="color: var(--text-secondary); font-size: 1.1rem; margin-top: 1rem;">Have questions or need a custom quote? Our dedicated team is ready to assist.</p>
+    </div>
+    
+    <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+      <div class="card-hover reveal delay-100">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Send a Message</h3>
+        <form id="contactForm" style="display: flex; flex-direction: column; gap: 1.2rem;">
+          <input type="text" placeholder="Full Name" required>
+          <input type="email" placeholder="Email Address" required>
+          <input type="text" placeholder="Company Name">
+          <textarea rows="5" placeholder="How can we help you?" required></textarea>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Send Message</button>
+        </form>
+      </div>
+      
+      <div class="card-hover reveal delay-200" style="display: flex; flex-direction: column;">
+        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Corporate Office</h3>
+        <div style="display: flex; flex-direction: column; gap: 1rem; color: var(--text-secondary); font-size: 1.05rem;">
+          <p><i class="fas fa-map-marker-alt" style="color: var(--accent); width: 25px;"></i> 1170 Warden Ave., Scarborough, ON M1R 2R1, Canada</p>
+          <p><i class="fas fa-phone" style="color: var(--accent); width: 25px;"></i> 416 444 3001</p>
+          <p><i class="fas fa-envelope" style="color: var(--accent); width: 25px;"></i> info@hbsservice.com</p>
+          <p><i class="fas fa-clock" style="color: var(--accent); width: 25px;"></i> Mon-Fri: 9:00 AM – 5:00 PM</p>
+        </div>
+        <div style="margin-top: auto; padding-top: 2rem;">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.2541097858694!2d-79.29744472382433!3d43.74681654637782!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4d2371be4d193%3A0xcda6dc7c4fc5903c!2s1170%20Warden%20Ave.%2C%20Scarborough%2C%20ON%20M1R%202R1%2C%20Canada!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="220" style="border:0; border-radius: 1rem;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="portal-page" class="page">
+  <div class="container" style="padding-bottom: 4rem; max-width: 500px;">
+    <div class="card-hover reveal" style="text-align: center; padding: 3rem 2rem;">
+      <div style="width: 80px; height: 80px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem auto;">
+        <i class="fas fa-fingerprint" style="font-size: 2.5rem; color: var(--accent); margin: 0;"></i>
+      </div>
+      <h2 style="font-size: 2rem;">Client Portal</h2>
+      <p style="margin: 1rem 0 2rem 0; color: var(--text-secondary);">Securely access your active orders, service requests, and account invoices.</p>
+      
+      <form id="portalLogin" style="display: flex; flex-direction: column; gap: 1.2rem;">
+        <input type="email" placeholder="Corporate Email" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-lock"></i> Secure Sign In</button>
+      </form>
+      
+      <div style="margin-top: 1.5rem; font-size: 0.9rem; display: flex; justify-content: space-between; color: var(--text-muted);">
+        <a href="#" style="color: var(--text-muted); text-decoration: none; transition: color 0.2s;">Forgot password?</a>
+        <a href="#" style="color: var(--accent); text-decoration: none; font-weight: 500;">Request Access</a>
+      </div>
+      <div id="portalMessage" style="margin-top: 1.5rem; font-size: 0.95rem; font-weight: 500;"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 3rem;">
+    <div>
+      <div class="logo" style="margin-bottom: 1.5rem; font-size: 1.2rem;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABECAYAAAAvMQN7AAAACXBIWXMAAAsTAAALEwEAmpwYAAAE+GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDEgNzkuMTRlY2I0MiwgMjAyMi8xMi8wMi0xOToxMjo0NCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgRmlyZXdvcmtzIENTNiAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIzLTExLTI5VDE1OjUwOjA1WiIgeG1wOk1vZGlmeURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjg0ZDJiYWVkLThiN2EtZDY0MC1iNzk1LTFlNDA5ZThhOWRhOCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRp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" style="height: 32px;" alt="HBS Logo">
+        <span>HBS Services</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Empowering your daily operations with premium medical and corporate solutions since 2003.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <p>Medical Devices</p>
+      <p>Office Consumables</p>
+      <p>Equipment Repair</p>
+      <p>Consulting</p>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <a href="#" data-page="about">About Us</a>
+      <a href="#" data-page="contact">Contact</a>
+      <a href="#" data-page="portal">Client Portal</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <div>
+      <h4>Connect</h4>
+      <div class="social-links">
+        <i class="fab fa-linkedin"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-facebook"></i>
+      </div>
+      <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 HBS Services Inc.<br>All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ========== NAVIGATION & PAGE ROUTING ========== */
+  const pages = {
+    home: document.getElementById('home-page'),
+    services: document.getElementById('services-page'),
+    about: document.getElementById('about-page'),
+    contact: document.getElementById('contact-page'),
+    portal: document.getElementById('portal-page')
+  };
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  function activatePage(pageId) {
+    Object.values(pages).forEach(p => p?.classList.remove('active-page'));
+    if(pages[pageId]) pages[pageId].classList.add('active-page');
+    
+    navLinks.forEach(link => {
+      if(link.getAttribute('data-page') === pageId) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Re-trigger scroll animations for the new page
+    setTimeout(handleScrollAnimations, 100);
+  }
+
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = el.getAttribute('data-page');
+      if(pages[target]) {
+        activatePage(target);
+        history.pushState(null, '', `#${target}`);
+      }
+    });
+  });
+
+  window.addEventListener('popstate', () => {
+    const hash = location.hash.slice(1);
+    activatePage(pages[hash] ? hash : 'home');
+  });
+
+  // Init page based on URL hash
+  const initialHash = location.hash.slice(1);
+  activatePage(pages[initialHash] ? initialHash : 'home');
+
+  /* ========== TRUE DARK/LIGHT THEME LOGIC ========== */
+  function setTheme(theme) {
+    if(theme === 'dark') {
+      document.body.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  // Check saved preference or OS preference
+  const savedTheme = localStorage.getItem('theme');
+  if(savedTheme === 'dark' || savedTheme === 'light') {
+    setTheme(savedTheme);
+  } else {
+    setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const isDark = document.body.classList.contains('dark');
+    setTheme(isDark ? 'light' : 'dark');
+  });
+
+  /* ========== SCROLL REVEAL ANIMATIONS ========== */
+  function handleScrollAnimations() {
+    const reveals = document.querySelectorAll('.reveal');
+    const windowHeight = window.innerHeight;
+    const elementVisible = 100; // when to trigger
+
+    reveals.forEach(reveal => {
+      const elementTop = reveal.getBoundingClientRect().top;
+      // Only animate elements in the currently active page
+      if (elementTop < windowHeight - elementVisible && reveal.closest('.active-page')) {
+        reveal.classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('scroll', handleScrollAnimations);
+  
+  /* ========== NAVBAR SCROLL EFFECT ========== */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  /* ========== FORM SIMULATIONS ========== */
+  const portalForm = document.getElementById('portalLogin');
+  if(portalForm) {
+    portalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msgDiv = document.getElementById('portalMessage');
+      msgDiv.innerHTML = '<span style="color: var(--accent);"><i class="fas fa-circle-notch fa-spin"></i> Authenticating...</span>';
+      setTimeout(() => {
+        msgDiv.innerHTML = '<span style="color: #10b981;"><i class="fas fa-check-circle"></i> Success! Redirecting to secure dashboard...</span>';
+      }, 1500);
+    });
+  }
+
+  const contactForm = document.getElementById('contactForm');
+  if(contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = contactForm.querySelector('button');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Sent Successfully';
+        btn.style.background = '#10b981';
+        setTimeout(() => {
+          contactForm.reset();
+          btn.innerHTML = originalText;
+          btn.style.background = '';
+        }, 3000);
+      }, 1200);
+    });
+  }
+</script>
+</body>
+</html>
