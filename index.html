@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>HBS Services | VIP Premium Solutions</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ========== CSS VARIABLES (VIP THEME) ========== */
+    :root {
+      /* Light Mode - Pristine Platinum */
+      --bg-base: #fafafa;
+      --bg-surface: #ffffff;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-color: rgba(0, 0, 0, 0.08);
+      
+      /* Aurora Accent (Royal Blue to Violet) */
+      --accent-1: #2563eb;
+      --accent-2: #8b5cf6;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      
+      /* Shadows */
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+      --shadow-glass: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark {
+      /* Dark Mode - Midnight Obsidian */
+      --bg-base: #030712;
+      --bg-surface: #111827;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-color: rgba(255, 255, 255, 0.08);
+      
+      --accent-1: #3b82f6;
+      --accent-2: #a855f7;
+      --accent-glow: rgba(139, 92, 246, 0.25);
+      
+      --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      --shadow-glass: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    /* ========== RESET & BASE ========== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    /* ========== SPLASH LOADER ========== */
+    #splash-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: var(--bg-base); z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .loader-ring {
+      width: 60px; height: 60px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent-1);
+      border-radius: 50%;
+      animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ========== LAYOUT UTILITIES ========== */
+    .container { max-width: 1300px; margin: 0 auto; padding: 0 2rem; }
+    .section-padding { padding: 8rem 0; }
+    .text-center { text-align: center; }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text; color: transparent;
+      display: inline-block;
+    }
+    .glass-panel {
+      background: rgba(var(--bg-surface), 0.6);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-glass), var(--shadow-lg);
+      border-radius: 1.5rem;
+    }
+
+    /* ========== NAVIGATION ========== */
+    .navbar {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: transparent; transition: all 0.4s ease;
+      padding: 1.5rem 0;
+    }
+    .navbar.scrolled {
+      background: rgba(var(--bg-surface), 0.8);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      padding: 1rem 0; border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; }
+    
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;
+      cursor: pointer; z-index: 1001;
+    }
+    .logo img { height: 40px; }
+
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-muted); font-weight: 500;
+      font-size: 0.95rem; transition: color 0.3s ease; position: relative;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-main); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0;
+      width: 0%; height: 2px; background: var(--accent-1);
+      transition: width 0.3s ease; border-radius: 2px;
+    }
+    .nav-links a.active::after { width: 100%; }
+
+    /* Mobile Menu Toggle */
+    .mobile-toggle {
+      display: none; font-size: 1.5rem; color: var(--text-main);
+      cursor: pointer; z-index: 1001; border: none; background: none;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      width: 60px; height: 32px; border-radius: 50px;
+      background: var(--bg-surface); border: 1px solid var(--border-color);
+      cursor: pointer; position: relative; display: flex; align-items: center;
+    }
+    .theme-toggle i {
+      position: absolute; font-size: 0.85rem; transition: all 0.4s ease;
+    }
+    .theme-toggle .fa-sun { left: 8px; color: #f59e0b; }
+    .theme-toggle .fa-moon { right: 8px; color: #9ca3af; opacity: 0; transform: scale(0.5); }
+    body.dark .theme-toggle .fa-sun { opacity: 0; transform: scale(0.5); }
+    body.dark .theme-toggle .fa-moon { opacity: 1; transform: scale(1); color: #c084fc; }
+    
+    .theme-toggle-thumb {
+      position: absolute; left: 4px; width: 24px; height: 24px;
+      background: var(--text-main); border-radius: 50%;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    body.dark .theme-toggle-thumb { left: calc(100% - 28px); background: #fff; }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+      padding: 1rem 2.5rem; border-radius: 50px; font-weight: 600;
+      font-size: 1rem; cursor: pointer; text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative; overflow: hidden; border: none; z-index: 1;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #fff; box-shadow: 0 10px 20px var(--accent-glow);
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+      opacity: 0; transition: opacity 0.3s ease; z-index: -1;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--accent-glow); }
+    .btn-primary:hover::before { opacity: 1; }
+    
+    .btn-outline {
+      background: transparent; border: 2px solid var(--border-color); color: var(--text-main);
+    }
+    .btn-outline:hover { border-color: var(--text-main); transform: translateY(-3px); }
+
+    /* ========== HERO VIP SECTION ========== */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding-top: 80px;
+    }
+    /* Animated Background Blob */
+    .blob {
+      position: absolute; top: 50%; left: 50%;
+      width: 800px; height: 800px; transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+      filter: blur(60px); z-index: -1;
+      animation: float 10s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -55%) scale(1.1) rotate(5deg); }
+    }
+
+    .hero-content h1 {
+      font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800;
+      line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 1.5rem;
+    }
+    .hero-content p {
+      font-size: clamp(1.1rem, 2vw, 1.3rem); color: var(--text-muted);
+      max-width: 650px; margin: 0 auto 3rem; line-height: 1.8;
+    }
+
+    /* ========== VIP CARDS ========== */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    
+    .vip-card {
+      padding: 3rem 2.5rem; transition: transform 0.4s ease, box-shadow 0.4s ease;
+      position: relative; overflow: hidden;
+    }
+    .vip-card:hover { transform: translateY(-10px); border-color: var(--accent-1); }
+    .vip-card i {
+      font-size: 2.5rem; margin-bottom: 1.5rem; display: inline-block;
+    }
+    .vip-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+    .vip-card p { color: var(--text-muted); font-size: 1.05rem; }
+
+    /* ========== PARTNER LOGOS ========== */
+    .partner-banner {
+      border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
+      padding: 3rem 0; background: var(--bg-surface);
+    }
+    .partner-grid {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 4rem; align-items: center;
+    }
+    .partner-grid img {
+      height: 35px; opacity: 0.4; filter: grayscale(100%);
+      transition: all 0.4s ease; cursor: pointer;
+    }
+    body.dark .partner-grid img { filter: brightness(0) invert(1) grayscale(100%); opacity: 0.3; }
+    .partner-grid img:hover { opacity: 1; filter: grayscale(0%); transform: scale(1.05); }
+    body.dark .partner-grid img:hover { filter: brightness(0) invert(1); }
+
+    /* ========== FORMS & INPUTS ========== */
+    .input-group { margin-bottom: 1.5rem; text-align: left; }
+    .input-group label {
+      display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted);
+    }
+    input, textarea {
+      width: 100%; padding: 1.2rem; border-radius: 1rem;
+      border: 1px solid var(--border-color); background: var(--bg-base);
+      color: var(--text-main); font-family: inherit; font-size: 1rem;
+      transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
+    input:focus, textarea:focus {
+      outline: none; border-color: var(--accent-1); background: var(--bg-surface);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    /* ========== SCROLL ANIMATIONS ========== */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+
+    /* ========== PAGE ROUTING ========== */
+    .page-section { display: none; opacity: 0; animation: fadePage 0.6s forwards; }
+    .page-section.active-page { display: block; }
+    @keyframes fadePage { to { opacity: 1; } }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--bg-surface); border-top: 1px solid var(--border-color);
+      padding: 6rem 0 3rem; margin-top: auto;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; }
+    .footer-links h4 { font-size: 1.1rem; margin-bottom: 1.5rem; }
+    .footer-links a, .footer-links p {
+      display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 0.8rem;
+      transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--accent-1); }
+    .social-icons i {
+      font-size: 1.5rem; margin-right: 1rem; cursor: pointer; color: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+    .social-icons i:hover { color: var(--accent-1); transform: translateY(-3px); }
+
+    /* ========== MOBILE RESPONSIVENESS ========== */
+    @media (max-width: 992px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+        background: rgba(var(--bg-surface), 0.98); backdrop-filter: blur(20px);
+        flex-direction: column; justify-content: center; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .nav-links.nav-active { right: 0; }
+      .nav-links a { font-size: 1.5rem; }
+      .mobile-toggle { display: block; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .section-padding { padding: 5rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="splash-screen">
+  <div class="loader-ring"></div>
+  <h2 style="margin-top: 1rem; font-weight: 600; color: var(--accent-1); letter-spacing: 2px;">HBS</h2>
+</div>
+
+<nav class="navbar" id="navbar">
+  <div class="container nav-container">
+    <div class="logo" data-page="home">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABECAYAAAAvMQN7AAAACXBIWXMAAAsTAAALEwEAmpwYAAAE+GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDEgNzkuMTRlY2I0MiwgMjAyMi8xMi8wMi0xOToxMjo0NCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgRmlyZXdvcmtzIENTNiAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIzLTExLTI5VDE1OjUwOjA1WiIgeG1wOk1vZGlmeURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjg0ZDJiYWVkLThiN2EtZDY0MC1iNzk1LTFlNDA5ZThhOWRhOCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRp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" alt="HBS Logo">
+      <span class="gradient-text">HBS Services</span>
+    </div>
+    
+    <button class="mobile-toggle" id="mobile-toggle"><i class="fas fa-bars"></i></button>
+
+    <div class="nav-links" id="nav-links">
+      <a href="#" data-page="home" class="active">Overview</a>
+      <a href="#" data-page="services">Solutions</a>
+      <a href="#" data-page="about">Legacy</a>
+      <a href="#" data-page="contact">Connect</a>
+      <a href="#" data-page="portal">VIP Portal</a>
+      
+      <div class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+        <div class="theme-toggle-thumb"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <div id="home-page" class="page-section active-page">
+    <section class="hero">
+      <div class="blob"></div>
+      <div class="container text-center">
+        <div class="hero-content reveal">
+          <h1>Elevate Your Enterprise.<br> <span class="gradient-text">Empower Your Workspace.</span></h1>
+          <p class="reveal delay-100">HBS Services delivers world-class medical equipment and corporate office solutions. Backed by 20+ years of engineering excellence and proactive 24/7 support.</p>
+          <div class="reveal delay-200" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="#" class="btn btn-primary" data-page="services">Discover Solutions <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></a>
+            <a href="#" class="btn btn-outline" data-page="contact">Request VIP Consultation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="partner-banner reveal">
+      <div class="container">
+        <p class="text-center" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem;">Trusted Technology Partners</p>
+        <div class="partner-grid">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" alt="HP">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Xerox_logo.svg/800px-Xerox_logo.svg.png" alt="Xerox">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Samsung_wordmark.svg/1920px-Samsung_wordmark.svg.png" alt="Samsung">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Lexmark-primary-logo.svg" alt="Lexmark">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Epson_logo.svg" alt="Epson">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Canon_wordmark.svg" alt="Canon">
+        </div>
+      </div>
+    </section>
+
+    <section class="section-padding container">
+      <div class="grid-2 reveal">
+        <div style="position: relative;">
+          <div style="position: absolute; top: -10%; left: -10%; width: 50%; height: 50%; background: var(--accent-1); filter: blur(80px); opacity: 0.2; border-radius: 50%;"></div>
+          <img src="https://images.unsplash.com/photo-1579389083078-4e7018379f7e?w=800&auto=format" style="border-radius: 1.5rem; width: 100%; box-shadow: var(--shadow-lg); position: relative; z-index: 1; border: 1px solid var(--border-color);" alt="Premium office collaboration">
+        </div>
+        <div style="padding-left: 2rem;">
+          <span style="color: var(--accent-1); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">The HBS Advantage</span>
+          <h2 style="font-size: 2.8rem; margin: 1rem 0; line-height: 1.1;">Engineering <br>Meets Excellence</h2>
+          <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.1rem;">We don't just supply equipment; we engineer reliability. By bridging cutting-edge global manufacturers with local, high-touch engineering support, we guarantee maximum operational uptime.</p>
+          <a href="#" class="btn btn-outline" data-page="about">Read Our Legacy</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="services-page" class="page-section section-padding">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: 5rem;">
+        <span class="gradient-text" style="font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;">What We Offer</span>
+        <h1 style="font-size: 3.5rem; margin-top: 1rem;">Premium Solutions</h1>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 1.5rem auto 0; font-size: 1.1rem;">Architected for performance. Tailored to the exact specifications of your corporate or medical environment.</p>
+      </div>
+      
+      <div class="grid-3">
+        <div class="vip-card glass-panel reveal delay-100">
+          <i class="fas fa-microscope gradient-text"></i>
+          <h3>Medical Diagnostics</h3>
+          <p>Certified repair, calibration, and preventive maintenance for Drucker, Thermo Fisher, and Unico lab devices. 24/7 SLA availability.</p>
+        </div>
+        <div class="vip-card glass-panel reveal delay-200">
+          <i class="fas fa-network-wired gradient-text"></i>
+          <h3>Enterprise Infrastructure</h3>
+          <p>Comprehensive technical audits, total-cost-of-ownership optimizations, and hardware lifecycle management for large-scale ops.</p>
+        </div>
+        <div class="vip-card glass-panel reveal delay-300">
+          <i class="fas fa-print gradient-text"></i>
+          <h3>Fleet Consumables</h3>
+          <p>Tier-1 supply chain provisioning for HP, Lexmark, Epson, and Canon. Featuring automated inventory restocking and VIP bulk rates.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="about-page" class="page-section section-padding">
+    <div class="container">
+      <div class="grid-2 reveal" style="margin-bottom: 6rem;">
+        <div>
+          <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem;">A Legacy of <br><span class="gradient-text">Trust</span></h1>
+          <p style="color: var(--text-muted); font-size: 1.15rem; margin-bottom: 1.5rem;">Founded in 2003, H.B.S SERVICES INC began with a singular vision: to eliminate downtime for mission-critical medical and corporate environments.</p>
+          <p style="color: var(--text-muted); font-size: 1.15rem;">Today, we are a premier North American supplier, combining boutique customer service with enterprise-grade supply chain logistics. We are relentlessly transparent, ruthlessly efficient, and 100% committed to your success.</p>
+        </div>
+        <div>
+          <img src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=800&auto=format" style="border-radius: 1.5rem; width: 100%; border: 1px solid var(--border-color); box-shadow: var(--shadow-lg);" alt="Laboratory Excellence">
+        </div>
+      </div>
+      
+      <div class="grid-3">
+        <div class="vip-card glass-panel reveal delay-100">
+          <i class="fas fa-gem gradient-text"></i>
+          <h3>Uncompromising Quality</h3>
+          <p>Every product and service meets rigorous QA standards. If it doesn't perform flawlessly, we make it right. No exceptions.</p>
+        </div>
+        <div class="vip-card glass-panel reveal delay-200">
+          <i class="fas fa-shield-alt gradient-text"></i>
+          <h3>Regulatory Compliance</h3>
+          <p>Over two decades of experience navigating strict medical device regulations ensuring your facility is always audit-ready.</p>
+        </div>
+        <div class="vip-card glass-panel reveal delay-300">
+          <i class="fas fa-globe gradient-text"></i>
+          <h3>Logistical Mastery</h3>
+          <p>Optimized continental shipping routes to Canada and the USA, guaranteeing your critical supplies arrive when seconds count.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="contact-page" class="page-section section-padding">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: 5rem;">
+        <h1 style="font-size: 3.5rem;">Initiate a Dialogue</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 1rem;">Direct access to our senior engineering and account management teams.</p>
+      </div>
+      
+      <div class="grid-2">
+        <div class="glass-panel reveal delay-100" style="padding: 3rem;">
+          <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">Secure Messaging</h3>
+          <form id="vipContactForm">
+            <div class="input-group">
+              <label>Executive Name</label>
+              <input type="text" placeholder="John Doe" required>
+            </div>
+            <div class="input-group">
+              <label>Corporate Email</label>
+              <input type="email" placeholder="john@enterprise.com" required>
+            </div>
+            <div class="input-group">
+              <label>Subject</label>
+              <input type="text" placeholder="Procurement Inquiry" required>
+            </div>
+            <div class="input-group">
+              <label>Message</label>
+              <textarea rows="4" placeholder="How can we elevate your operations?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="contactSubmitBtn">Transmit Message</button>
+          </form>
+        </div>
+        
+        <div class="reveal delay-200" style="display: flex; flex-direction: column; height: 100%;">
+          <div class="glass-panel" style="padding: 3rem; flex-grow: 1;">
+            <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">Headquarters</h3>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem; font-size: 1.1rem;">
+              <p style="display: flex; align-items: flex-start; gap: 1rem;">
+                <i class="fas fa-map-pin gradient-text" style="font-size: 1.5rem; margin-top: 5px;"></i>
+                <span style="color: var(--text-muted);">1170 Warden Ave.<br>Scarborough, ON M1R 2R1<br>Canada</span>
+              </p>
+              <p style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-phone gradient-text" style="font-size: 1.3rem;"></i>
+                <span style="color: var(--text-main); font-weight: 500;">+1 (416) 444 3001</span>
+              </p>
+              <p style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-envelope gradient-text" style="font-size: 1.3rem;"></i>
+                <span style="color: var(--text-main); font-weight: 500;">vip@hbsservice.com</span>
+              </p>
+              <p style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-clock gradient-text" style="font-size: 1.3rem;"></i>
+                <span style="color: var(--text-muted);">Mon-Fri: 09:00 - 17:00 EST</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="portal-page" class="page-section section-padding">
+    <div class="container" style="display: flex; justify-content: center;">
+      <div class="glass-panel reveal" style="width: 100%; max-width: 500px; padding: 4rem 3rem; text-align: center; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--accent-1); opacity: 0.1; filter: blur(40px); border-radius: 50%;"></div>
+        
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 20px; background: rgba(var(--bg-surface), 0.5); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+          <i class="fas fa-fingerprint gradient-text" style="font-size: 2.5rem;"></i>
+        </div>
+        
+        <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Partner Portal</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Encrypted access to your enterprise dashboard.</p>
+        
+        <form id="vipPortalLogin">
+          <div class="input-group">
+            <input type="email" placeholder="Corporate ID (Email)" required style="text-align: center;">
+          </div>
+          <div class="input-group" style="margin-bottom: 2rem;">
+            <input type="password" placeholder="Access Token" required style="text-align: center;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;" id="portalSubmitBtn">Authenticate Session</button>
+        </form>
+        
+        <div style="margin-top: 2rem; display: flex; justify-content: space-between; font-size: 0.9rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+          <a href="#" style="color: var(--text-muted); text-decoration: none;">Recover Access</a>
+          <a href="#" style="color: var(--accent-1); text-decoration: none; font-weight: 600;">Request Audit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom: 1.5rem;">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAABECAYAAAAvMQN7AAAACXBIWXMAAAsTAAALEwEAmpwYAAAE+GlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4wLWMwMDEgNzkuMTRlY2I0MiwgMjAyMi8xMi8wMi0xOToxMjo0NCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgRmlyZXdvcmtzIENTNiAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIzLTExLTI5VDE1OjUwOjA1WiIgeG1wOk1vZGlmeURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjQtMDMtMDZUMjA6MzQ6MjMrMDg6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjg0ZDJiYWVkLThiN2EtZDY0MC1iNzk1LTFlNDA5ZThhOWRhOCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRp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" alt="HBS Logo" style="height: 30px;">
+          <span style="font-weight: 800; font-size: 1.2rem;">HBS Services</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; max-width: 300px;">Providing engineered reliability and uncompromising supply chain solutions to North America since 2003.</p>
+        <div class="social-icons" style="margin-top: 1.5rem;">
+          <i class="fab fa-linkedin-in"></i>
+          <i class="fab fa-twitter"></i>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Solutions</h4>
+        <a href="#">Medical Calibrations</a>
+        <a href="#">Enterprise Printers</a>
+        <a href="#">Lifecycle Management</a>
+        <a href="#">VIP Procurement</a>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Corporate</h4>
+        <a href="#" data-page="about">Executive Team</a>
+        <a href="#">Investors</a>
+        <a href="#">Careers</a>
+        <a href="#">Compliance</a>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#">Privacy Architecture</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">SLA Agreements</a>
+      </div>
+    </div>
+    
+    <div style="border-top: 1px solid var(--border-color); margin-top: 4rem; padding-top: 2rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+      <p>&copy; 2026 H.B.S SERVICES INC. All rights reserved. Engineering excellence.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ========== INITIALIZATION & SPLASH ==========
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      splash.style.opacity = '0';
+      splash.style.visibility = 'hidden';
+      handleScrollAnimations(); // trigger initial animations
+    }, 600); // Premium brief loading feel
+  });
+
+  // ========== VIP THEME SYSTEM ==========
+  const themeToggle = document.getElementById('themeToggle');
+  function applyTheme(theme) {
+    if(theme === 'dark') {
+      document.body.classList.add('dark');
+      localStorage.setItem('hbs_theme', 'dark');
+    } else {
+      document.body.classList.remove('dark');
+      localStorage.setItem('hbs_theme', 'light');
+    }
+  }
+
+  // Check saved or OS preference
+  const savedTheme = localStorage.getItem('hbs_theme');
+  if(savedTheme) {
+    applyTheme(savedTheme);
+  } else {
+    applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    applyTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+  });
+
+  // ========== NAVBAR LOGIC ==========
+  const navbar = document.getElementById('navbar');
+  const mobileBtn = document.getElementById('mobile-toggle');
+  const navMenu = document.getElementById('nav-links');
+
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  mobileBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('nav-active');
+    const icon = mobileBtn.querySelector('i');
+    if(navMenu.classList.contains('nav-active')) {
+      icon.classList.replace('fa-bars', 'fa-times');
+    } else {
+      icon.classList.replace('fa-times', 'fa-bars');
+    }
+  });
+
+  // ========== ROUTING SYSTEM ==========
+  const pages = {
+    home: document.getElementById('home-page'),
+    services: document.getElementById('services-page'),
+    about: document.getElementById('about-page'),
+    contact: document.getElementById('contact-page'),
+    portal: document.getElementById('portal-page')
+  };
+
+  function navigateTo(pageId) {
+    // Hide all
+    Object.values(pages).forEach(p => p && p.classList.remove('active-page'));
+    // Show target
+    if(pages[pageId]) pages[pageId].classList.add('active-page');
+    
+    // Update active nav link
+    document.querySelectorAll('[data-page]').forEach(link => {
+      if(link.classList.contains('active')) link.classList.remove('active');
+      if(link.getAttribute('data-page') === pageId && link.tagName === 'A') {
+        link.classList.add('active');
+      }
+    });
+
+    // Close mobile menu if open
+    navMenu.classList.remove('nav-active');
+    mobileBtn.querySelector('i').classList.replace('fa-times', 'fa-bars');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Reset and trigger animations for the new page
+    setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.remove('active'));
+      handleScrollAnimations();
+    }, 100);
+  }
+
+  // Click interceptor for data-page links
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-page]');
+    if(link) {
+      e.preventDefault();
+      const target = link.getAttribute('data-page');
+      navigateTo(target);
+      history.pushState(null, '', `#${target}`);
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    const hash = location.hash.slice(1);
+    navigateTo(pages[hash] ? hash : 'home');
+  });
+
+  // Initial load route
+  const hash = location.hash.slice(1);
+  navigateTo(pages[hash] ? hash : 'home');
+
+
+  // ========== INTERSECTION OBSERVER (VIP SCROLL) ==========
+  function handleScrollAnimations() {
+    const reveals = document.querySelectorAll('.reveal');
+    const windowHeight = window.innerHeight;
+    
+    reveals.forEach(el => {
+      const elementTop = el.getBoundingClientRect().top;
+      // Only animate if inside the visible page section
+      if (elementTop < windowHeight - 50 && el.closest('.active-page')) {
+        el.classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('scroll', handleScrollAnimations);
+
+
+  // ========== FORM SIMULATIONS (VIP FEEL) ==========
+  function simulateLoading(btn, successText, originalText, iconClass) {
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processing...';
+    btn.style.pointerEvents = 'none';
+    
+    setTimeout(() => {
+      btn.innerHTML = `<i class="fas ${iconClass}"></i> ${successText}`;
+      btn.style.background = '#10b981'; // Success green
+      
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+        btn.style.pointerEvents = 'auto';
+      }, 3000);
+    }, 1500);
+  }
+
+  document.getElementById('vipContactForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    simulateLoading(
+      document.getElementById('contactSubmitBtn'), 
+      'Transmission Secured', 
+      'Transmit Message', 
+      'fa-check-double'
+    );
+    e.target.reset();
+  });
+
+  document.getElementById('vipPortalLogin')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    simulateLoading(
+      document.getElementById('portalSubmitBtn'), 
+      'Access Granted', 
+      'Authenticate Session', 
+      'fa-unlock'
+    );
+    e.target.reset();
+  });
+
+</script>
+</body>
+</html>
